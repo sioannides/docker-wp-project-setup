@@ -1,5 +1,7 @@
 FROM wordpress:latest
 LABEL maintainer="steliosioannides@hotmail.com"
+ENV APACHE_RUN_USER='www-data'
+ENV APACHE_RUN_GROUP='www-data'
 
 RUN usermod -u 1000 ${APACHE_RUN_USER}
 
