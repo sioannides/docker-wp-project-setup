@@ -20,6 +20,9 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 	chmod +x wp-cli.phar && \
 	mv wp-cli.phar /usr/local/bin/wp
 
+#install git
+RUN apt-get install -y git
+
 RUN usermod -u 1000 ${APACHE_RUN_USER}
 
 USER ${APACHE_RUN_USER}
