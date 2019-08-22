@@ -12,6 +12,9 @@ RUN curl --location --output /usr/local/bin/mhsendmail https://github.com/mailho
 
 RUN echo 'sendmail_path="/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025 --from=no-reply@docker.dev"' > /usr/local/etc/php/conf.d/mailhog.ini
 
+#install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 RUN usermod -u 1000 ${APACHE_RUN_USER}
 
 USER ${APACHE_RUN_USER}
