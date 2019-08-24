@@ -1,0 +1,48 @@
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+#RewriteCond %{SERVER_PORT} !^443$
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+RewriteRule ^wp-admin/includes/ - [F,L]
+RewriteRule !^wp-includes/ - [S=3]
+RewriteRule ^wp-includes/[^/]+\.php$ - [F,L]
+RewriteRule ^wp-includes/js/tinymce/langs/.+\.php - [F,L]
+RewriteRule ^wp-includes/theme-compat/ - [F,L]
+</IfModule>
+# END WordPress
+
+# Disable directory browsing
+Options All -Indexes
+
+# Protect .htaccess
+<Files ~ "^.*\.([Hh][Tt][Aa])">
+    order allow,deny
+    deny from all
+    satisfy all
+</Files>
+
+# Protect shell scripts
+<Files ~ "^.*\.sh">
+    order allow,deny
+    deny from all
+    satisfy all
+</Files>
+
+# Block WordPress xmlrpc.php requests
+<Files xmlrpc.php>
+    order allow,deny
+    deny from all
+    satisfy all
+</Files>
+
+# Block WordPress wp-config.php requests
+<files wp-config.php>
+    order allow,deny
+    deny from all
+    satisfy all
+</files>
