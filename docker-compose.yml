@@ -1,0 +1,56 @@
+version: '3.3'
+
+services:
+  mailhog: #mailhog service
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+    restart: always
+  phpmyadmin: #PHPMyAdmin service
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+    restart: always
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: "${DB_PASS}"
+  db: #MySQL service
+    image: mysql:5.7 #https://wordpress.org/support/article/requirements/
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASS}"
+    ports:
+      - "3306:3306"
+  wordpress: #WordPress service
+    build:
+      context: ./
+      dockerfile: bin/dockerDev/Dockerfile
+    depends_on:
+      - db
+      - mailhog
+    #user: "${APACHE_RUN_USER}:${APACHE_RUN_GROUP}"
+    user: "root:root"
+    volumes:
+      - ./etc/backup:/var/www/etc/backup #backup folder
+      - ./bin/config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini #php configuration file
+    ports:
+      - "80:80" #map 80 local port to 80 server port
+      - "443:443" #map 443 local port to 443 server port
+    restart: always
+    environment:
+      APACHE_RUN_USER: www-data
+      APACHE_RUN_GROUP: www-data
+      WORDPRESS_DB_HOST: "${WORDPRESS_DB_HOST}:${WORDPRESS_DB_HOST_PORT}"
+      WORDPRESS_DB_USER: "${DB_USER}"
+      WORDPRESS_DB_PASSWORD: "${DB_PASS}"
+      WORDPRESS_DB_NAME: "${DB_NAME}"
+volumes:
+  db_data: {}
