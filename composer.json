@@ -1,0 +1,59 @@
+{
+  "name": "sioannides/docker-wp-project-setup",
+  "description": "Docker Wordpress Project Setup",
+  "keywords": ["wordpress", "docker", "project", "setup", "rapid-development", "template", "mysql"],
+  "version": "1.0.0",
+  "time": "22/08/2019",
+  "homepage":"https://github.com/sioannides/docker-wp-project-setup",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Stelios Ioannides",
+      "email": "steliosioannides@hotmail.com",
+      "homepage": "http://stelios.ioannides.info",
+      "role": "Software Engineer/Senior Web Developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/sioannides/docker-wp-project-setup/issues",
+    "source": "https://github.com/sioannides/docker-wp-project-setup"
+  },
+  "repositories":[
+    {
+      "type":"composer",
+      "url":"https://wpackagist.org"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.0",
+    "composer/installers": "~1.0",
+    "brainmaestro/composer-git-hooks": "^2.4",
+    "fancyguy/webroot-installer": "1.1.0",
+    "josegonzalez/dotenv": "^3.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*",
+    "phpunit/phpunit-selenium": "~3.0",
+    "squizlabs/php_codesniffer": "*",
+    "thecodingmachine/phpstan-strict-rules": "^0.10.3"
+  },
+  "suggest": {
+    "ext-xdebug": "Allows code coverage reports and advanced debugging"
+  },
+  "extra": {
+    "webroot-dir": "webroot",
+    "installer-paths": {
+      "webroot/wp-content/plugins/{$name}": ["type:wordpress-plugin"],
+      "webroot/wp-content/themes/{$name}": ["type:wordpress-theme"]
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+      "docker-compose up -d"
+    ],
+    "post-update-cmd": [
+      "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ]
+  }
+}
